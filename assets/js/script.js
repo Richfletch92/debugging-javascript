@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let answers = '';
 
             for (let letter in currentQuestion.answers) {
-                answers = `
+                answers += `
                 <label>
                     <input type="radio" name="question${questionNumber}" value="${letter}">
                     ${letter} : ${currentQuestion.answers[letter]}
@@ -81,11 +81,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         button.innerHTML = 'Try Again';
         button.removeEventListener('click', showResults);
+        button.addEventListener('click', resetQuiz);
     }
 
     function resetQuiz() {
+        // Clear previous answers
+        const answerContainers = quizContainer.querySelectorAll('.answers');
+        answerContainers.forEach(container => {
+            container.querySelectorAll('input').forEach(input => {
+                input.checked = false;
+            });
+            container.style.color = ''; // Reset the color
+        });
+
+        // Rebuild the quiz
         buildQuiz();
 
+        // Reset the button text and event listeners
         button.innerHTML = 'Submit Quiz';
         button.removeEventListener('click', resetQuiz);
         button.addEventListener('click', showResults);
